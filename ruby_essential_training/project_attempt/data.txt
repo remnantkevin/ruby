@@ -1,0 +1,7 @@
+quick cup,coffee,5
+taste of little itaky,pizza,10
+pita pocket,fast food,10
+hot tamale,mexican,25
+cafe masala,indian,30
+mallard house,new american,35
+a,a,5
