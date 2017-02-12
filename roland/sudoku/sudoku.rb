@@ -30,7 +30,9 @@ class Sudoku
   end
 
   def check(x, y, n)
-    if layout[y].include?(n)
+    if n > 9 || n < 0
+      false
+    elsif layout[y].include?(n)
       false
     elsif get_column(x).include?(n)
       false
@@ -94,22 +96,16 @@ class Sudoku
     x = 0
     y = 0
     n = 1
-    while n < 10
+    while true
       if check(x, y, n) # if n can be inserted at x,y
         layout[y][x] = n # insert n at x,y
         x, y = next_cell(x, y) # based on x,y find which cell to go to next
         n = 0 # reset to zero (which will be incremented at end of while loop), so when the next cell is checked it starts checking from 1 (n=1)
-      else # if n couldn't be inserted at x,y ...
-        if n == 9 # ... either we've gone through a cycle of n=1-9 (i.e. we've tried every number and none work), so we must go back to the previous non-fixed cell
-          layout[y][x] = 0 # rollback the current cell to 0
-          x, y = prev_cell(x, y) # find the previous cell to go to
-          if layout[y][x] == 9 # if that previous cell is 9, start cycling through numbers to indert from 0 (incremented to 1)
-            n = 0
-          else # else the number to try in that previous cell must be set to what's in that previous cell (will be incremented at end of while)
-            n = layout[y][x]
-          end
-        #else do nothing - i.e. n will be incremented
-        end
+      elsif n >= 9 # ... either we've gone through a cycle of n=1-9 (i.e. we've tried every number and none work), so we must go back to the previous non-fixed cell
+        layout[y][x] = 0 # rollback the current cell to 0
+        x, y = prev_cell(x, y) # find the previous cell to go to
+        n = layout[y][x]
+      #else (i.e. when n < 9) do nothing - i.e. n will be incremented
       end #end if check
 
       n = n + 1
@@ -120,39 +116,6 @@ class Sudoku
 
     end #end while n
   end #end def
-
-  def solve
-    counter = 0
-    x = 0
-    y = 0
-    while true
-        #try all other values for n at x,y
-        temp = [1,2,3,4,5,6,7,8,9]
-        temp.delete(layout[y][x])
-        inserted = false
-        while temp.length > 0
-          # p temp
-          n = temp.shift
-          if check(x, y, n) # can n be inserted at x,y?
-            layout[y][x] = n
-            x, y = next_cell(x, y)
-            inserted = true
-            break
-          end
-        end
-        if !inserted # no value inserted at x,y
-          # puts "n!=0"
-          layout[y][x] = 0 # rollback
-          x, y = prev_cell(x, y)
-        end
-
-      counter += 1
-      if counter%25000 ==0
-        print_l
-      end
-    end #end while n
-  end #end def
-
 
 
   def print_l
