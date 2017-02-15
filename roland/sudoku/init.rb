@@ -1,5 +1,7 @@
 
-require './sudoku'
+require_relative 'sudoku/solver'
+require_relative 'sudoku/puzzle'
+
 
 arr = [ [0,0,8,  0,7,0,  9,4,0],
         [0,0,2,  0,5,0,  0,6,8],
@@ -87,7 +89,6 @@ fixed_nums = [ [0,2],
   [8,4],
   [8,6],]
 
-
-su = Sudoku.new(arr, fixed_nums)
-su.solve
-su.print_l
+puzzle = Sudoku::Puzzle.new(arr, fixed_nums)
+puts puzzle
+puts Sudoku::Solver.new(puzzle).solve!
