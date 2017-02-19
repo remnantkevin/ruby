@@ -1,0 +1,5 @@
+D, [2017-02-19T03:24:14.220332 #12255] DEBUG -- :   [1m[35m (0.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "users"[0m
+D, [2017-02-19T03:24:14.225198 #12255] DEBUG -- :   [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT  "users".* FROM "users" ORDER BY "users"."user_id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+D, [2017-02-19T03:24:21.941031 #12255] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2017-02-19T03:24:21.942255 #12255] DEBUG -- :   [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "bleets" ("user_id", "message") VALUES (?, ?)[0m  [["user_id", 1], ["message", "this is my first bleet"]]
+D, [2017-02-19T03:24:21.942423 #12255] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[31mrollback transaction[0m
