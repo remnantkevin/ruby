@@ -1,5 +1,40 @@
-D, [2017-02-19T03:24:14.220332 #12255] DEBUG -- :   [1m[35m (0.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "users"[0m
-D, [2017-02-19T03:24:14.225198 #12255] DEBUG -- :   [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT  "users".* FROM "users" ORDER BY "users"."user_id" ASC LIMIT ?[0m  [["LIMIT", 1]]
-D, [2017-02-19T03:24:21.941031 #12255] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
-D, [2017-02-19T03:24:21.942255 #12255] DEBUG -- :   [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "bleets" ("user_id", "message") VALUES (?, ?)[0m  [["user_id", 1], ["message", "this is my first bleet"]]
-D, [2017-02-19T03:24:21.942423 #12255] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[31mrollback transaction[0m
+D, [2017-02-20T00:46:27.053732 #9651] DEBUG -- :   [1m[35m (0.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "users"[0m
+D, [2017-02-20T00:46:27.062303 #9651] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2017-02-20T00:46:27.071332 #9651] DEBUG -- :   [1m[35mSQL (0.5ms)[0m  [1m[32mINSERT INTO "users" ("first_name", "last_name", "email", "username") VALUES (?, ?, ?, ?)[0m  [["first_name", "Kevin"], ["last_name", "Elliott"], ["email", "thisismyemail@gmail.com"], ["username", "remnant"]]
+D, [2017-02-20T00:46:27.088201 #9651] DEBUG -- :   [1m[35m (16.4ms)[0m  [1m[36mcommit transaction[0m
+D, [2017-02-20T00:47:07.735764 #9651] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2017-02-20T00:47:07.737023 #9651] DEBUG -- :   [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "bleets" ("user_id", "message", "bleeted_at") VALUES (?, ?, ?)[0m  [["user_id", 1], ["message", "this is my first bleet"], ["bleeted_at", "2017-02-20T00:47:07+02:00"]]
+D, [2017-02-20T00:47:07.745244 #9651] DEBUG -- :   [1m[35m (8.0ms)[0m  [1m[36mcommit transaction[0m
+D, [2017-02-20T00:47:10.919012 #9651] DEBUG -- :   [1m[36mBleet Load (0.5ms)[0m  [1m[34mSELECT "bleets".* FROM "bleets"[0m
+D, [2017-02-20T00:47:15.378310 #9651] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2017-02-20T00:47:15.379285 #9651] DEBUG -- :   [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "bleets" ("user_id", "message", "bleeted_at") VALUES (?, ?, ?)[0m  [["user_id", 1], ["message", "second bleet"], ["bleeted_at", "2017-02-20T00:47:15+02:00"]]
+D, [2017-02-20T00:47:15.406385 #9651] DEBUG -- :   [1m[35m (26.8ms)[0m  [1m[36mcommit transaction[0m
+D, [2017-02-20T00:47:15.407001 #9651] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2017-02-20T00:47:15.408281 #9651] DEBUG -- :   [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "bleets" ("user_id", "message", "bleeted_at") VALUES (?, ?, ?)[0m  [["user_id", 1], ["message", "third bleet"], ["bleeted_at", "2017-02-20T00:47:15+02:00"]]
+D, [2017-02-20T00:47:15.427688 #9651] DEBUG -- :   [1m[35m (19.0ms)[0m  [1m[36mcommit transaction[0m
+D, [2017-02-20T00:47:15.428822 #9651] DEBUG -- :   [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+D, [2017-02-20T00:47:15.430254 #9651] DEBUG -- :   [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "bleets" ("user_id", "message", "bleeted_at") VALUES (?, ?, ?)[0m  [["user_id", 1], ["message", "fourth bleet"], ["bleeted_at", "2017-02-20T00:47:15+02:00"]]
+D, [2017-02-20T00:47:15.439658 #9651] DEBUG -- :   [1m[35m (9.1ms)[0m  [1m[36mcommit transaction[0m
+D, [2017-02-20T00:47:29.247242 #9651] DEBUG -- :   [1m[36mBleet Load (0.2ms)[0m  [1m[34mSELECT "bleets".* FROM "bleets"[0m
+D, [2017-02-20T00:47:43.457114 #9651] DEBUG -- :   [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+D, [2017-02-20T00:47:43.460301 #9651] DEBUG -- :   [1m[35mSQL (0.7ms)[0m  [1m[32mINSERT INTO "tags" ("word") VALUES (?)[0m  [["word", "second"]]
+D, [2017-02-20T00:47:43.482631 #9651] DEBUG -- :   [1m[35m (21.9ms)[0m  [1m[36mcommit transaction[0m
+D, [2017-02-20T00:47:43.483246 #9651] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2017-02-20T00:47:43.484392 #9651] DEBUG -- :   [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "tags" ("word") VALUES (?)[0m  [["word", "fourth"]]
+D, [2017-02-20T00:47:43.506322 #9651] DEBUG -- :   [1m[35m (21.6ms)[0m  [1m[36mcommit transaction[0m
+D, [2017-02-20T00:47:48.938723 #9651] DEBUG -- :   [1m[36mTag Load (0.4ms)[0m  [1m[34mSELECT "tags".* FROM "tags"[0m
+D, [2017-02-20T00:48:36.723599 #9651] DEBUG -- :   [1m[36mBleet Load (0.5ms)[0m  [1m[34mSELECT  "bleets".* FROM "bleets" ORDER BY "bleets"."bleet_id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+D, [2017-02-20T00:49:40.458765 #9651] DEBUG -- :   [1m[36mTag Load (0.3ms)[0m  [1m[34mSELECT "tags".* FROM "tags" INNER JOIN "bleet_tags" ON "tags"."tag_id" = "bleet_tags"."tag_id" WHERE "bleet_tags"."bleet_id" = ?[0m  [["bleet_id", 1]]
+D, [2017-02-20T00:49:56.028978 #9651] DEBUG -- :   [1m[36mTag Load (0.4ms)[0m  [1m[34mSELECT  "tags".* FROM "tags" ORDER BY "tags"."tag_id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+D, [2017-02-20T00:53:03.337473 #9651] DEBUG -- :   [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+D, [2017-02-20T00:53:03.350921 #9651] DEBUG -- :   [1m[35mSQL (0.4ms)[0m  [1m[32mINSERT INTO "bleet_tags" ("bleet_id", "tag_id") VALUES (?, ?)[0m  [["bleet_id", 1], ["tag_id", 1]]
+D, [2017-02-20T00:53:03.360235 #9651] DEBUG -- :   [1m[35m (8.8ms)[0m  [1m[36mcommit transaction[0m
+D, [2017-02-20T00:53:30.817220 #9651] DEBUG -- :   [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+D, [2017-02-20T00:53:30.820714 #9651] DEBUG -- :   [1m[35mSQL (0.5ms)[0m  [1m[33mUPDATE "bleets" SET "bleeted_at" = ? WHERE "bleets"."bleet_id" = ?[0m  [["bleeted_at", "2017-02-20T00:53:30+02:00"], ["bleet_id", 1]]
+D, [2017-02-20T00:53:30.840529 #9651] DEBUG -- :   [1m[35m (19.0ms)[0m  [1m[36mcommit transaction[0m
+D, [2017-02-20T00:53:53.996448 #9651] DEBUG -- :   [1m[36mBleetTag Load (0.4ms)[0m  [1m[34mSELECT "bleet_tags".* FROM "bleet_tags"[0m
+D, [2017-02-20T00:54:46.906366 #9651] DEBUG -- :   [1m[36mTag Load (0.4ms)[0m  [1m[34mSELECT  "tags".* FROM "tags" WHERE "tags"."tag_id" = ? LIMIT ?[0m  [["tag_id", 2], ["LIMIT", 1]]
+D, [2017-02-20T00:55:12.360588 #9651] DEBUG -- :   [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+D, [2017-02-20T00:55:12.367257 #9651] DEBUG -- :   [1m[35mSQL (0.5ms)[0m  [1m[32mINSERT INTO "bleet_tags" ("bleet_id", "tag_id") VALUES (?, ?)[0m  [["bleet_id", 1], ["tag_id", 2]]
+D, [2017-02-20T00:55:12.377873 #9651] DEBUG -- :   [1m[35m (9.9ms)[0m  [1m[36mcommit transaction[0m
+D, [2017-02-20T00:55:26.328812 #9651] DEBUG -- :   [1m[36mBleetTag Load (0.2ms)[0m  [1m[34mSELECT "bleet_tags".* FROM "bleet_tags"[0m

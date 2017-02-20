@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
  username text NOT NULL UNIQUE
 );
 
+-- does not null get contained in references/FK
 CREATE TABLE IF NOT EXISTS bleets (
  bleet_id integer PRIMARY KEY,
  user_id integer NOT NULL,
@@ -27,3 +28,15 @@ CREATE TABLE IF NOT EXISTS bleets (
 -- CREATE TABLE IF NOT EXISTS tbl (d1 text, d2 text DEFAULT (DATETIME('now')));
 -- insert into tbl (d1) values ("hello");
 -- select * from tbl;
+
+CREATE TABLE IF NOT EXISTS tags (
+ tag_id integer PRIMARY KEY,
+ word text NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS bleet_tags (
+  bleet_id integer NOT NULL,
+  tag_id integer NOT NULL,
+  FOREIGN KEY (bleet_id) REFERENCES bleets (bleet_id),
+  FOREIGN KEY (tag_id) REFERENCES tags (tag_id) 
+);
