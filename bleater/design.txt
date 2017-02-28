@@ -1,0 +1,12 @@
+Functions:
+
+Add a user
+Log in as a user (username and password)
+Bleat as a user
+(automatically match hashtags in tweets)
+Print list of usernames
+Print list of hashtags
+Select hashtag and get id/first few words of bleats with that hashtag
+Select user and get a list of their bleats
+
+alias/handle? m-to-m?
