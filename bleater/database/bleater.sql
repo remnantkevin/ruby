@@ -1,27 +1,28 @@
--- sqlite3 bleeter.db < bleeter.sql
+-- sqlite3 bleater.db < bleater.sql
 
 CREATE TABLE IF NOT EXISTS users (
  user_id integer PRIMARY KEY,
  first_name text NOT NULL,
  last_name text NOT NULL,
  email text NOT NULL UNIQUE,
+ password text NOT NULL,
  username text NOT NULL UNIQUE
 );
 
 -- does not null get contained in references/FK
-CREATE TABLE IF NOT EXISTS bleets (
- bleet_id integer PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS bleats (
+ bleat_id integer PRIMARY KEY,
  user_id integer NOT NULL,
  message text NOT NULL,
- bleeted_at text NOT NULL,
+ bleated_at text NOT NULL,
  FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
 
--- CREATE TABLE IF NOT EXISTS bleets (
---  bleet_id integer PRIMARY KEY,
+-- CREATE TABLE IF NOT EXISTS bleats (
+--  bleat_id integer PRIMARY KEY,
 --  user_id integer NOT NULL,
 --  message text NOT NULL,
---  bleeted_at text DEFAULT (DATETIME('now')),
+--  bleated_at text DEFAULT (DATETIME('now')),
 --  FOREIGN KEY (user_id) REFERENCES users (user_id)
 -- );
 
@@ -34,9 +35,9 @@ CREATE TABLE IF NOT EXISTS tags (
  word text NOT NULL UNIQUE
 );
 
-CREATE TABLE IF NOT EXISTS bleet_tags (
-  bleet_id integer NOT NULL,
+CREATE TABLE IF NOT EXISTS bleat_tags (
+  bleat_id integer NOT NULL,
   tag_id integer NOT NULL,
-  FOREIGN KEY (bleet_id) REFERENCES bleets (bleet_id),
-  FOREIGN KEY (tag_id) REFERENCES tags (tag_id) 
+  FOREIGN KEY (bleat_id) REFERENCES bleats (bleat_id),
+  FOREIGN KEY (tag_id) REFERENCES tags (tag_id)
 );

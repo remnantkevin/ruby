@@ -1,7 +1,7 @@
 require 'date'
 require 'active_record'
 
-ActiveRecord::Base.logger = Logger.new(File.open('bleeter.log', 'w'))
+ActiveRecord::Base.logger = Logger.new(File.open('bleater.log', 'w'))
 
 ActiveRecord::Base.establish_connection(
   :adapter  => 'sqlite3',
@@ -11,26 +11,26 @@ ActiveRecord::Base.establish_connection(
 
 
 class User < ActiveRecord::Base
-  has_many :bleets
+  has_many :bleats
+
+  validates :password, length: {minimum: 8}
 end
 
-
-
-class BleetTag < ActiveRecord::Base
-  belongs_to :bleet
+class BleatTag < ActiveRecord::Base
+  belongs_to :bleat
   belongs_to :tag
 end
 
 class Tag < ActiveRecord::Base
-  has_many :bleet_tags
-  has_many :bleets, through: :bleet_tags
+  has_many :bleat_tags
+  has_many :bleats, through: :bleat_tags
 end
 
-class Bleet < ActiveRecord::Base
+class Bleat < ActiveRecord::Base
   #? where these two go?
   belongs_to :user
-  has_many :bleet_tags
-  has_many :tags, through: :bleet_tags
+  has_many :bleat_tags
+  has_many :tags, through: :bleat_tags
 
   validates :message, length: {maximum: 160}
 
@@ -40,7 +40,7 @@ class Bleet < ActiveRecord::Base
   before_save :before_save
 
   # The after_initialize callback is triggered every time a new object of the class is initialized.
-  # if you wanna mess around with a bleet before saving it then this wouldn't work; but it also wouln't work whenever you read and store from the db cuz .new will be called
+  # if you wanna mess around with a bleat before saving it then this wouldn't work; but it also wouln't work whenever you read and store from the db cuz .new will be called
   # private
   #   def after_initialize
   #     p 'Hello there'
@@ -48,17 +48,17 @@ class Bleet < ActiveRecord::Base
 
   private
     def before_save
-      # set_attribute(:bleeted_at, "hi")
-      # update_attribute(:bleeted_at, "hi")
-      self.bleeted_at = DateTime.now
-      #@bleeted_at = DateTime.now
+      # set_attribute(:bleated_at, "hi")
+      # update_attribute(:bleated_at, "hi")
+      self.bleated_at = DateTime.now
+      #@bleated_at = DateTime.now
     end
 
 
   # def initialize(user, message)
   #   @user = user
   #   @message = message
-  #   @bleeted_at = DateTime.now
+  #   @bleated_at = DateTime.now
   # end
 
 end
@@ -77,25 +77,25 @@ def user
   end
 end
 
-def bleet
-  @bleet ||= Bleet.new(
+def bleat
+  @bleat ||= Bleat.new(
     user: user, #why obj and not number? does it 'pick out' the pk_id?
-    message: 'this is my first bleet'
+    message: 'this is my first bleat'
   )
 end
 
-def more_bleets
-  Bleet.create(
+def more_bleats
+  Bleat.create(
     user: user,
-    message: "second bleet"
+    message: "second bleat"
   )
-  Bleet.create(
+  Bleat.create(
     user: user,
-    message: "third bleet"
+    message: "third bleat"
   )
-  Bleet.create(
+  Bleat.create(
     user: user,
-    message: "fourth bleet"
+    message: "fourth bleat"
   )
 end
 
