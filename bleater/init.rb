@@ -17,7 +17,8 @@
 #
 # u = Bleater::User.create(first_name: 'Kevin', last_name: 'Elliott', email: 'skiimilk@gmail.com', password: 'silent123', username: 'remnant')
 
-require './bleater/bleater'
+ require './bleater/bleater'
+# Dir["./bleater/*.rb"].each {|file| require file}
 
 b = Bleater::Bleater.new()
 b.launch
