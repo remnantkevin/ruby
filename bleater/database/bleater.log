@@ -1,1 +1,2 @@
-D, [2017-03-08T16:34:38.909295 #2996] DEBUG -- :   [1m[36mBleater::User Load (0.2ms)[0m  [1m[34mSELECT "users"."username" FROM "users"[0m
+D, [2017-03-09T02:08:12.640374 #8792] DEBUG -- :   [1m[36mBleater::User Load (0.5ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."username" = ? LIMIT ?[0m  [["username", "remnant"], ["LIMIT", 1]]
+D, [2017-03-09T02:08:12.654839 #8792] DEBUG -- :   [1m[36mBleater::Bleat Load (0.2ms)[0m  [1m[34mSELECT "bleats".* FROM "bleats" WHERE "bleats"."user_id" = ?[0m  [["user_id", 1]]
