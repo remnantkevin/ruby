@@ -1,0 +1,17 @@
+D, [2017-03-11T00:04:41.731751 #4745] DEBUG -- :   [1m[36mBleater::User Load (0.5ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."username" = ? LIMIT ?[0m  [["username", "kevell"], ["LIMIT", 1]]
+D, [2017-03-11T00:04:41.770901 #4745] DEBUG -- :   [1m[36mBleater::Tag Exists (0.2ms)[0m  [1m[34mSELECT  1 AS one FROM "tags" WHERE "tags"."word" = ? LIMIT ?[0m  [["word", "happy"], ["LIMIT", 1]]
+D, [2017-03-11T00:04:41.788494 #4745] DEBUG -- :   [1m[36mBleater::Tag Load (0.3ms)[0m  [1m[34mSELECT  "tags".* FROM "tags" WHERE "tags"."word" = ? LIMIT ?[0m  [["word", "happy"], ["LIMIT", 1]]
+D, [2017-03-11T00:04:41.801626 #4745] DEBUG -- :   [1m[36mBleater::Tag Exists (0.2ms)[0m  [1m[34mSELECT  1 AS one FROM "tags" WHERE "tags"."word" = ? LIMIT ?[0m  [["word", "johnwick2"], ["LIMIT", 1]]
+D, [2017-03-11T00:04:41.803795 #4745] DEBUG -- :   [1m[36mBleater::Tag Exists (0.1ms)[0m  [1m[34mSELECT  1 AS one FROM "tags" WHERE "tags"."word" = ? LIMIT ?[0m  [["word", "friday"], ["LIMIT", 1]]
+D, [2017-03-11T00:04:41.806783 #4745] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2017-03-11T00:04:41.809509 #4745] DEBUG -- :   [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "bleats" ("user_id", "message", "bleated_at") VALUES (?, ?, ?)[0m  [["user_id", 1], ["message", "im so #happy that i get to see #johnwick2 on #friday"], ["bleated_at", "2017-03-11T00:04:41+02:00"]]
+D, [2017-03-11T00:04:41.810655 #4745] DEBUG -- :   [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "bleat_tags" ("bleat_id", "tag_id") VALUES (?, ?)[0m  [["bleat_id", 3], ["tag_id", 3]]
+D, [2017-03-11T00:04:41.811735 #4745] DEBUG -- :   [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "tags" ("word") VALUES (?)[0m  [["word", "johnwick2"]]
+D, [2017-03-11T00:04:41.812316 #4745] DEBUG -- :   [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "bleat_tags" ("bleat_id", "tag_id") VALUES (?, ?)[0m  [["bleat_id", 3], ["tag_id", 5]]
+D, [2017-03-11T00:04:41.813054 #4745] DEBUG -- :   [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "tags" ("word") VALUES (?)[0m  [["word", "friday"]]
+D, [2017-03-11T00:04:41.813607 #4745] DEBUG -- :   [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "bleat_tags" ("bleat_id", "tag_id") VALUES (?, ?)[0m  [["bleat_id", 3], ["tag_id", 6]]
+D, [2017-03-11T00:04:41.818857 #4745] DEBUG -- :   [1m[35m (4.1ms)[0m  [1m[36mcommit transaction[0m
+D, [2017-03-11T00:04:41.821157 #4745] DEBUG -- :   [1m[36mBleater::Bleat Load (0.3ms)[0m  [1m[34mSELECT "bleats".* FROM "bleats" WHERE "bleats"."user_id" = ?[0m  [["user_id", 1]]
+D, [2017-03-11T00:04:41.822188 #4745] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+D, [2017-03-11T00:04:41.823233 #4745] DEBUG -- :   [1m[35m (0.1ms)[0m  [1m[36mcommit transaction[0m
+D, [2017-03-11T00:05:20.860799 #4745] DEBUG -- :   [1m[36mBleater::Tag Load (0.4ms)[0m  [1m[34mSELECT "tags".* FROM "tags"[0m

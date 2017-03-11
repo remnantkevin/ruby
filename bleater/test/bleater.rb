@@ -1,5 +1,5 @@
 require 'active_record' #here or in all model files? or both?
-Dir["./bleater/*.rb"].each {|file| require file} # why is this run from where init.rb is?
+Dir["./bleater/*.rb"].each {|file| require file}
 # require './bleater/user'
 # require './bleater/bleat'
 # require './bleater/tag'
@@ -43,8 +43,7 @@ module Bleater
         puts '2. Sign up'
         puts '3. View all Bleater users'
         puts '4. View bleats by user'
-        puts '5. View bleats by tag'
-        puts '6. Make a bleat'
+        puts '5. Make a bleat'
         puts 'Q. Quit'
         print '> '
         input = gets.chomp
@@ -58,10 +57,10 @@ module Bleater
     end
 
     def display_user_loggedin
-      puts '-'*40
+      puts
       print ' '*20
       puts "Logged in as: #{current_user.username} | #{Bleat.where(user_id: current_user.user_id).count} "
-      puts '-'*40
+      puts
     end
 
     def introduction
@@ -83,57 +82,34 @@ module Bleater
         puts "\n==== Users ===="
         view_all_users
       when '4'
-        puts "\n==== Find Bleats by User ===="
-        display_bleats_by_user(find_bleats_by_user_form)
+        puts "\n==== Find Bleats ===="
+        find_bleats_form
       when '5'
-        puts "\n==== Find Bleats by Tag ===="
-        display_bleats_by_tag(find_bleats_by_tag_form)
-      when '6'
         puts "\n==== Bleat ===="
-        make_bleat(make_bleat_form) #? get info back and then ass to function to help readiability?
+        make_bleat_form
       else
-        puts "\nNot a valid option. Try again.\n"
+        puts 'Not a valid option. Try again.'
       end
     end
 
     def make_bleat_form
-      puts 'What would you like to say?'
-      bleat_text = gets.chomp.strip #? why do functions return the RHS of the last line of the func as opposed to the expression
-    end
+      puts 'Enter bleat text:'
+      message = gets.chomp.strip #! could validate <= 145
+      tagss = message.scan(/\#\w+/) #way to use capture groups to not get #?
+      # p tags
 
-    #? call bleat?
-    def make_bleat(bleat_text)
+      # create Bleat
+      # get that bleats id
+      #createupdate tags
 
-      #? should i check for user not nil or my code assumes it? if check, what do?
-
-      # create new bleat
-      b = Bleat.new(message: bleat_text)
-
-      # extract only text from bleat, i.e. without hash at beginning
-      tags = bleat_text.scan(/\#\w+/).map do |tag_text|
-        tag_text.delete('#') #? should it be saved without the #?
+      b = Bleat.new(user_id: current_user.user_id) #User.blear << bleat
+      tagss.each do |tagg|
+        b.tags << Tag.new(word: tagg.delete('#'))
       end
 
-      #? more detail in comment -- if false etc.
-      # for each tag extracted, either add the corresponding tag to the current bleat, or create a new tag and add it to the current bleat
-      tags.each do |tag_text|
-        # second time tag appears in bleat
-        # tag exists
-        if Tag.exists?(word: tag_text)
-          # user.bleats.last.tags <<
-          b.tags << Tag.find_by_word(tag_text)
-          p "#{tag_text} tag exists"
-        else # tag doesn't exist
-          # create new tag and attach to bleat
-          b.tags << Tag.new(word: tag_text)
-          p "#{tag_text} tag doesn't exists"
-        end
-      end
+      p b
 
-      # assign the new bleat to the user and save -- intermediary attribute (e.g. ids) created for the tags and bleat when user is saved
-      current_user.bleats << b
-      current_user.save
-
+      b.save
 
     end
 
@@ -149,9 +125,9 @@ module Bleater
         # puts "===="
         # puts current_user
         # puts "===="
-        puts "\nWelcome #{current_user.first_name}. Logging in ...\n"
+        puts "Welcome #{current_user.first_name}. Logging in ..."
       else
-        puts "\nUsername and password combination not valid. Try again or signup.\n"
+        puts 'Username and password combination not valid. Try again or signup.'
       end
     end
 
@@ -247,7 +223,7 @@ module Bleater
     end
 
     # should these say display .... for more description?
-    def find_bleats_by_user_form
+    def find_bleats_form
       puts 'Search for bleats made by someone'
       puts '----'
       print 'Username: '
@@ -257,7 +233,7 @@ module Bleater
       #? seems more efficient to use && in this case as it will stop as soonas one fails...not actually...needs to chec other side of &
       # while !username.match(/^\w{5,15}$/) || !User.exists?(username: username)
       while !(username.match(/^\w{5,15}$/) && User.exists?(username: username))
-        puts "\nThat username does not exist. Usernames must be between 5 and 15 characters long, and can contain only alphabetic characters, numbers, and underscores. For example, rem_nant. Please try again."
+        puts "\nThat username does not exist. Usernames must be between 5 and 15 characters long, and can contain only alphabetic characters and underscores. For example, rem_nant. Please try again."
         print 'Username: '
         username = gets.chomp.strip
       end
@@ -267,8 +243,7 @@ module Bleater
 
       #! not just form now -- handled by method that called form method? should the form method return the answer/input
       #? use ifs?
-      # display_bleats_by_user(username)
-      return username
+      display_bleats_by_user(username)
     end
 
     #! expand to find similarly names users?
@@ -289,29 +264,6 @@ module Bleater
           puts bleat.message
         end
 
-    end
-
-    def find_bleats_by_tag_form
-      puts 'Search for bleats with a certain tag'
-      puts '----'
-      print 'Tag: #'
-      tag_text = gets.chomp.strip
-
-      while !(tag_text.match(/^\w+$/) && Tag.exists?(word: tag_text))
-        puts "\nThat tag does not exist. Tags must be at least one character long, and can contain only alphabetic characters, numbers, and underscores. For example, 'happy_birthday26'. Please try again."
-        print 'Tag: #'
-        tag_text = gets.chomp.strip
-      end
-
-      return tag_text
-    end
-
-    def display_bleats_by_tag(tag_text)
-      bleats = Tag.find_by_word(tag_text).bleats
-
-      bleats.each do |bleat|
-        puts bleat.message
-      end
     end
 
   end
