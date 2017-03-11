@@ -42,9 +42,15 @@ CREATE TABLE IF NOT EXISTS bleat_tags (
   FOREIGN KEY (tag_id) REFERENCES tags (tag_id)
 );
 
-CREATE TABLE IF NOT EXISTS bleats_users (
+CREATE TABLE IF NOT EXISTS aliases (
+  alias_id integer PRIMARY KEY,
   user_id integer NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users (user_id)
+);
+
+CREATE TABLE IF NOT EXISTS aliases_bleats (
+  alias_id integer NOT NULL,
   bleat_id integer NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES users (user_id),
+  FOREIGN KEY (alias_id) REFERENCES aliases (alias_id),
   FOREIGN KEY (bleat_id) REFERENCES bleats (bleat_id)
 );

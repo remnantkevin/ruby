@@ -20,22 +20,29 @@ module Bleater
       @current_user = nil
 
       # do these exist beyond the scope of this init function?
-      ActiveRecord::Base.logger = Logger.new(File.open('/home/kevin/webdev/ruby/bleater/database/bleater2.log', 'w'))
+      ActiveRecord::Base.logger = Logger.new(File.open('/home/kevin/webdev/ruby/bleater/database/bleater.log', 'w'))
 
       ActiveRecord::Base.establish_connection(
         :adapter  => 'sqlite3',
-        :database => '/home/kevin/webdev/ruby/bleater/database/bleater2.db'
+        :database => '/home/kevin/webdev/ruby/bleater/database/bleater.db'
       )
 
     end
 
+    def create_users
+
+            User.create(first_name: 'Kevin', last_name: 'Elliott', username: 'kevell', email: 'skim@gmail.com', password: 'Silent!123')
+            User.create(first_name: 'Roland', last_name: 'Elliott', username: 'rolell', email: 'rol@gmail.com', password: 'Silent!123')
+            User.create(first_name: 'Laurie', last_name: 'Scarbs', username: 'laurie', email: 'ls@gmail.com', password: 'Silent!123')
+
+    end
+
+    def destroy_all_aliases
+      Alias.destroy_all
+    end
+
     def launch
       #p Dir["*.rb"]
-
-      # User.create(first_name: 'Kevin', last_name: 'Elliott', username: 'kevell', email: 'skim@gmail.com', password: 'Silent!123')
-      # User.create(first_name: 'Roland', last_name: 'Elliott', username: 'rolell', email: 'rol@gmail.com', password: 'Silent!123')
-      # User.create(first_name: 'Laurie', last_name: 'Scarbs', username: 'laurie', email: 'ls@gmail.com', password: 'Silent!123')
-
 
       # Bleat.create(user_id: 1, message: "hbhbhbhbhb #happybirthday #kevin")
 
@@ -43,13 +50,10 @@ module Bleater
       # action loop
       input = nil
       while true
-        puts '-------'
-        p User.find_by_username('kevell').bleats
-        p User.find_by_username('rolell').bleats
-        puts '-------'
-        
         display_user_loggedin unless current_user == nil
         puts
+        puts '0. create users'
+        puts '00. destroy aliases'
         puts '1. Login'
         puts '2. Sign up'
         puts '3. Make a bleat'
@@ -58,6 +62,7 @@ module Bleater
         puts '6. View bleats by tag'
         puts '7. View bleats you are tagged in (requires login)'
         puts '8. View bleats a user is tagged in'
+        puts '9. Delete current user account'
         puts 'Q. Quit'
         print '> '
         input = gets.chomp
@@ -71,10 +76,10 @@ module Bleater
     end
 
     def display_user_loggedin
-      puts '-'*40
+      puts '-'*50
       print ' '*20
       puts "Logged in as: #{current_user.username} | #{Bleat.where(user_id: current_user.user_id).count} "
-      puts '-'*40
+      puts '-'*50
     end
 
     def introduction
@@ -86,6 +91,12 @@ module Bleater
     def do_action(action)
       # p "action: #{action}"
       case action
+      when '0'
+        puts "\n==== Creating users ===="
+        create_users
+      when '00'
+        puts "\n==== Destroy aliases ===="
+        destroy_all_aliases
       when '1'
         puts "\n==== Login ===="
         login_form
@@ -114,6 +125,13 @@ module Bleater
       when '8'
         puts "\n==== Find bleats a user is tagged in ===="
         display_bleats_by_tagged_user(find_bleats_by_tagged_user_form)
+      when '9'
+        if current_user == nil #? where shd this check go?
+          puts "\nPlease login before selecting this option\n"
+        else
+          current_user.destroy
+          self.current_user = nil #? this not happen auto? no gets set to inactive
+        end
       else
         puts "\nNot a valid option. Try again.\n"
       end
@@ -121,18 +139,11 @@ module Bleater
 
     def display_bleats_user_tagged_in
 
-
-
-
-      #!!remember: if you store the m2m relationship from the one persepctive, you can search for them by the second perscpective (see above)
-
-      Bleat.all().each do |bleat|
-        bleat.users.each do |bleat_user|
-          if bleat_user.username == current_user.username
-            puts bleat.message
-          end
-        end
+      current_user.alias.bleats.each do |bleat|
+        puts bleat.message
       end
+
+
     end
 
 
@@ -156,10 +167,9 @@ module Bleater
       end
 
       #????? should you store PKs or usernames? if user changes username will it change elsehwre?
-      user_tags = bleat_text.scan(/\@\w+/).map do |user_tag|
+      aliases = bleat_text.scan(/\@\w+/).map do |user_tag|
         user_tag.delete('@') #? should it be saved without the #?
       end
-      p "0. #{b}"
       #? more detail in comment -- if false etc.
       # for each tag extracted, either add the corresponding tag to the current bleat, or create a new tag and add it to the current bleat
       tags.each do |tag_text|
@@ -168,35 +178,34 @@ module Bleater
         if Tag.exists?(word: tag_text)
           # user.bleats.last.tags <<
           b.tags << Tag.find_by_word(tag_text)
-          p "#{tag_text} tag exists"
+          # p "#{tag_text} tag exists"
         else # tag doesn't exist
           # create new tag and attach to bleat
           b.tags << Tag.new(word: tag_text)
-          p "#{tag_text} tag doesn't exists"
-        end
-      end
-
-      p "1. #{b}"
-
-      user_tags.each do |username|
-        if User.exists?(username: username)
-          b.users << User.find_by_username(username)
-          # p "#{tag_text} tag exists"
-        else # tag doesn't exist
-          puts "There is no Bleater user with username #{username}. They have not been tagged in your bleat."
           # p "#{tag_text} tag doesn't exists"
         end
       end
 
-      p current_user
-      p "2. #{b}"
-      b.user_id = current_user.user_id
       p b
 
       # assign the new bleat to the user and save -- intermediary attribute (e.g. ids) created for the tags and bleat when user is saved
       #? don't 'create' throughout as if something goes wrong nothing shoudl save?
       current_user.bleats << b #!! failed here as it can't know which table to add the bleat to: add it to the bleats table with a FK as userid or add the bleat to the join table
       current_user.save
+
+      p b
+
+      aliases.each do |username|
+        user = User.find_by_username(username)
+        if user
+          user.alias.bleats << b
+        else
+          puts "\n** @#{username} does not exist, so was not tagged in your bleat **\n"
+        end
+      end
+
+
+
 
 
     end
