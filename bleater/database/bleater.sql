@@ -41,3 +41,10 @@ CREATE TABLE IF NOT EXISTS bleat_tags (
   FOREIGN KEY (bleat_id) REFERENCES bleats (bleat_id),
   FOREIGN KEY (tag_id) REFERENCES tags (tag_id)
 );
+
+CREATE TABLE IF NOT EXISTS bleats_users (
+  user_id integer NOT NULL,
+  bleat_id integer NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users (user_id),
+  FOREIGN KEY (bleat_id) REFERENCES bleats (bleat_id)
+);

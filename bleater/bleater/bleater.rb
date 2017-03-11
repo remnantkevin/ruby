@@ -15,15 +15,16 @@ module Bleater
     def initialize
       #p Dir["*.rb"]
 
+
       #? what inital set to?
       @current_user = nil
 
       # do these exist beyond the scope of this init function?
-      ActiveRecord::Base.logger = Logger.new(File.open('/home/kevin/webdev/ruby/bleater/database/bleater.log', 'w'))
+      ActiveRecord::Base.logger = Logger.new(File.open('/home/kevin/webdev/ruby/bleater/database/bleater2.log', 'w'))
 
       ActiveRecord::Base.establish_connection(
         :adapter  => 'sqlite3',
-        :database => '/home/kevin/webdev/ruby/bleater/database/bleater.db'
+        :database => '/home/kevin/webdev/ruby/bleater/database/bleater2.db'
       )
 
     end
@@ -31,20 +32,32 @@ module Bleater
     def launch
       #p Dir["*.rb"]
 
+      # User.create(first_name: 'Kevin', last_name: 'Elliott', username: 'kevell', email: 'skim@gmail.com', password: 'Silent!123')
+      # User.create(first_name: 'Roland', last_name: 'Elliott', username: 'rolell', email: 'rol@gmail.com', password: 'Silent!123')
+      # User.create(first_name: 'Laurie', last_name: 'Scarbs', username: 'laurie', email: 'ls@gmail.com', password: 'Silent!123')
+
+
       # Bleat.create(user_id: 1, message: "hbhbhbhbhb #happybirthday #kevin")
 
       introduction
       # action loop
       input = nil
       while true
+        puts '-------'
+        p User.find_by_username('kevell').bleats
+        p User.find_by_username('rolell').bleats
+        puts '-------'
+        
         display_user_loggedin unless current_user == nil
         puts
         puts '1. Login'
         puts '2. Sign up'
-        puts '3. View all Bleater users'
-        puts '4. View bleats by user'
-        puts '5. View bleats by tag'
-        puts '6. Make a bleat'
+        puts '3. Make a bleat'
+        puts '4. View all Bleater users'
+        puts '5. View bleats by user'
+        puts '6. View bleats by tag'
+        puts '7. View bleats you are tagged in (requires login)'
+        puts '8. View bleats a user is tagged in'
         puts 'Q. Quit'
         print '> '
         input = gets.chomp
@@ -80,28 +93,56 @@ module Bleater
         puts "\n==== Signup ===="
         signup_form
       when '3'
-        puts "\n==== Users ===="
-        view_all_users
-      when '4'
-        puts "\n==== Find Bleats by User ===="
-        display_bleats_by_user(find_bleats_by_user_form)
-      when '5'
-        puts "\n==== Find Bleats by Tag ===="
-        display_bleats_by_tag(find_bleats_by_tag_form)
-      when '6'
         puts "\n==== Bleat ===="
         make_bleat(make_bleat_form) #? get info back and then ass to function to help readiability?
+      when '4'
+        puts "\n==== Users ===="
+        view_all_users
+      when '5'
+        puts "\n==== Find bleats by user ===="
+        display_bleats_by_user(find_bleats_by_user_form)
+      when '6'
+        puts "\n==== Find Bleats by Tag ===="
+        display_bleats_by_tag(find_bleats_by_tag_form)
+      when '7'
+        if current_user == nil #? where shd this check go?
+          puts "\nPlease login before selecting this option\n"
+        else
+          puts "\n==== Bleats you are tagged in ===="
+          display_bleats_user_tagged_in
+        end
+      when '8'
+        puts "\n==== Find bleats a user is tagged in ===="
+        display_bleats_by_tagged_user(find_bleats_by_tagged_user_form)
       else
         puts "\nNot a valid option. Try again.\n"
       end
     end
+
+    def display_bleats_user_tagged_in
+
+
+
+
+      #!!remember: if you store the m2m relationship from the one persepctive, you can search for them by the second perscpective (see above)
+
+      Bleat.all().each do |bleat|
+        bleat.users.each do |bleat_user|
+          if bleat_user.username == current_user.username
+            puts bleat.message
+          end
+        end
+      end
+    end
+
 
     def make_bleat_form
       puts 'What would you like to say?'
       bleat_text = gets.chomp.strip #? why do functions return the RHS of the last line of the func as opposed to the expression
     end
 
-    #? call bleat?
+    #? call bleat? [naming cn=onventions]
+    #! assumes only tag actual users?
     def make_bleat(bleat_text)
 
       #? should i check for user not nil or my code assumes it? if check, what do?
@@ -114,6 +155,11 @@ module Bleater
         tag_text.delete('#') #? should it be saved without the #?
       end
 
+      #????? should you store PKs or usernames? if user changes username will it change elsehwre?
+      user_tags = bleat_text.scan(/\@\w+/).map do |user_tag|
+        user_tag.delete('@') #? should it be saved without the #?
+      end
+      p "0. #{b}"
       #? more detail in comment -- if false etc.
       # for each tag extracted, either add the corresponding tag to the current bleat, or create a new tag and add it to the current bleat
       tags.each do |tag_text|
@@ -130,8 +176,26 @@ module Bleater
         end
       end
 
+      p "1. #{b}"
+
+      user_tags.each do |username|
+        if User.exists?(username: username)
+          b.users << User.find_by_username(username)
+          # p "#{tag_text} tag exists"
+        else # tag doesn't exist
+          puts "There is no Bleater user with username #{username}. They have not been tagged in your bleat."
+          # p "#{tag_text} tag doesn't exists"
+        end
+      end
+
+      p current_user
+      p "2. #{b}"
+      b.user_id = current_user.user_id
+      p b
+
       # assign the new bleat to the user and save -- intermediary attribute (e.g. ids) created for the tags and bleat when user is saved
-      current_user.bleats << b
+      #? don't 'create' throughout as if something goes wrong nothing shoudl save?
+      current_user.bleats << b #!! failed here as it can't know which table to add the bleat to: add it to the bleats table with a FK as userid or add the bleat to the join table
       current_user.save
 
 
@@ -158,8 +222,8 @@ module Bleater
     # order?
     def login_user(username, password)
       #find by?
-      username = 'remnant'
-      password = 'silent123'
+      # username = 'kevell'
+      # password = 'Silent!123'
       # don't need bleater:: cuz in same module?
       # self.current_user = User.where(username: username, password: password).take
       self.current_user = User.find_by(username: username, password: password) # a User object or nil if not found

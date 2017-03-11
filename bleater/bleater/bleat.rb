@@ -3,8 +3,9 @@ require 'active_record'
 
 module Bleater
   class Bleat < ActiveRecord::Base
-    #? where these two go?
-    belongs_to :user
+    #? where these  go?
+    has_and_belongs_to_many :users
+
     has_many :bleat_tags
     has_many :tags, through: :bleat_tags
 

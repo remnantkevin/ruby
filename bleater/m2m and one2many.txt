@@ -1,0 +1,12 @@
+1-to-many
+=========
+user ----(owns)---->* bleat
+
+many-to-many
+============
+user <----(tagged in > || < tag)---->* bleat
+
+
+if use user.bleats, it can't know if you're talking about those bleats it owns or those bleats that tag it
+
+therefore, can't have a one2many and m2m relationship between same models, at same time
