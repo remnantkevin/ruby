@@ -1,2 +1,4 @@
-D, [2017-03-11T17:55:32.634955 #26463] DEBUG -- :   [1m[36mBleater::User Load (0.6ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."username" = ? AND "users"."password" = ? LIMIT ?[0m  [["username", "kevell"], ["password", "Silent!123"], ["LIMIT", 1]]
-D, [2017-03-11T17:55:32.651511 #26463] DEBUG -- :   [1m[35m (0.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "bleats" WHERE "bleats"."user_id" = ?[0m  [["user_id", 1]]
+D, [2017-03-12T02:14:05.596847 #2627] DEBUG -- :   [1m[36mBleater::User Load (0.5ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."username" = ? AND "users"."password" = ? LIMIT ?[0m  [["username", "rolell"], ["password", "Silent!123"], ["LIMIT", 1]]
+D, [2017-03-12T02:14:05.614410 #2627] DEBUG -- :   [1m[35m (0.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "bleats" WHERE "bleats"."user_id" = ?[0m  [["user_id", 2]]
+D, [2017-03-12T02:14:14.458757 #2627] DEBUG -- :   [1m[36mBleater::User Load (0.5ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."username" = ? AND "users"."password" = ? LIMIT ?[0m  [["username", "kevell"], ["password", "SIlent!123"], ["LIMIT", 1]]
+D, [2017-03-12T02:14:14.460744 #2627] DEBUG -- :   [1m[35m (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "bleats" WHERE "bleats"."user_id" = ?[0m  [["user_id", 2]]

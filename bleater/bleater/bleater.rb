@@ -120,11 +120,11 @@ module Bleater
           puts "\nPlease login before selecting this option\n"
         else
           puts "\n==== Bleats you are tagged in ===="
-          display_bleats_user_tagged_in
+          display_bleats_user_tagged_in(current_user)
         end
       when '8'
         puts "\n==== Find bleats a user is tagged in ===="
-        display_bleats_by_tagged_user(find_bleats_by_tagged_user_form)
+          display_bleats_user_tagged_in(find_bleats_by_tagged_user_form)
       when '9'
         if current_user == nil #? where shd this check go?
           puts "\nPlease login before selecting this option\n"
@@ -137,15 +137,23 @@ module Bleater
       end
     end
 
-    def display_bleats_user_tagged_in
-
-      current_user.alias.bleats.each do |bleat|
-        puts bleat.message
+    def find_bleats_by_tagged_user_form
+      puts "Which username would you like to search bleats for?"
+      print 'Username: '
+      username = gets.chomp.strip
+      while !User.exists?(username: username)
+        puts "\nThat username does not exist. Usernames must be between 5 and 15 characters long, and can contain only alphabetic characters, numbers, and underscores. For example, rem_nant. Please try again."
+        print 'Username: '
+        username = gets.chomp.strip
       end
-
-
+      return User.find_by_username(username) #? this not un-ruby-like as can't return it otherwise?
     end
 
+    def display_bleats_user_tagged_in(user)
+      user.alias.bleats.each do |bleat|
+        puts bleat.message
+      end
+    end
 
     def make_bleat_form
       puts 'What would you like to say?'
@@ -235,7 +243,13 @@ module Bleater
       # password = 'Silent!123'
       # don't need bleater:: cuz in same module?
       # self.current_user = User.where(username: username, password: password).take
-      self.current_user = User.find_by(username: username, password: password) # a User object or nil if not found
+      user = User.find_by(username: username, password: password) # a User object or nil if not found
+      if user # a User object or nil if not found
+        self.current_user = user
+        true
+      else
+        false
+      end
       # p current_user
       # return true
     end
@@ -292,7 +306,7 @@ module Bleater
       when :n, :s
         !input.match(/^[[:alpha:]\- ]+$/)
       when :e
-        !input.match(/^[\w.]+@\w+(\.[[:alpha:]]+){1,2}$/) || User.exists?(email: input)
+        !input.match(/^\w+@\w+(\.[[:alpha:]]+){1,2}$/) || User.exists?(email: input) #! \w = [a-zA-Z0-9_]
       when :u
         !input.match(/^\w{5,15}$/) || User.exists?(username: input)
       when :p
@@ -306,8 +320,9 @@ module Bleater
     def signup_new_user(name, surname, email, username, password)
       # have to be in column order?
       # !! what if fail?
-      User.create(first_name: name, last_name: surname, email: email, username: username, password: password)
-      puts "\nAccount created. Welcome to Bleater! Login to use Bleater\n"
+      user = User.create(first_name: name, last_name: surname, email: email, username: username, password: password)
+      puts "\nAccount created. Welcome to Bleater! You are now logged in.\n"
+      self.current_user = user
     end
 
     # !! use same one with optional input for viewing one or many
